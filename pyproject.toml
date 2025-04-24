@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=42.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spark-delta-iceberg"
+version = "0.1.0"
+description = "Projeto de Apache Spark com Delta Lake e Apache Iceberg"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    {name = "Miguel Rossi Fermo", email = "miguelrossifermo05@gmail.com"}
+]
+
+dependencies = [
+    "pyspark>=3.4.0",
+    "delta-spark>=2.4.0",
+    "jupyter>=1.0.0",
+    "jupyterlab>=4.0.0",
+    "pandas>=2.0.0",
+    "matplotlib>=3.7.0",
+    "pyarrow>=12.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
