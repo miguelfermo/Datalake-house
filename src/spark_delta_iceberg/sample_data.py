@@ -75,7 +75,7 @@ def load_public_dataset(spark: SparkSession) -> Tuple[DataFrame, str]:
     Returns:
         Tuple[DataFrame, str]: DataFrame com os dados e descrição do dataset
     """
-    # URL do dataset (CSV de vendas de supermercado)
+    # URL do dataset público (CSV de vendas de supermercado)
     url = "https://raw.githubusercontent.com/IBM/developer-dataset/master/supermarket-sales.csv"
     
     # Descrição do dataset

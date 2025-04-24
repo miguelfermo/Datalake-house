@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Alexandre Destro Zanoni" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Delta Lake - Apache Spark com Delta Lake e Apache Iceberg</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Delta Lake";
+        var mkdocs_page_input_path = "delta-lake.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Apache Spark com Delta Lake e Apache Iceberg
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Delta Lake</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#o-que-e-delta-lake">O que é Delta Lake?</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#principais-caracteristicas">Principais Características</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configuracao-do-ambiente">Configuração do Ambiente</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#operacoes-com-delta-lake">Operações com Delta Lake</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#operacao-insert">Operação INSERT</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#operacao-update">Operação UPDATE</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#operacao-delete">Operação DELETE</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#operacao-merge">Operação MERGE</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#time-travel">Time Travel</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#vantagens-do-delta-lake">Vantagens do Delta Lake</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#exemplo-completo">Exemplo Completo</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#referencias">Referências</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../apache-iceberg/">Apache Iceberg</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Apache Spark com Delta Lake e Apache Iceberg</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Delta Lake</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="delta-lake">Delta Lake</h1>
+<p>O Delta Lake é uma camada de armazenamento de código aberto que adiciona confiabilidade ao seu data lake. Nesta página, demonstramos as operações básicas de INSERT, UPDATE e DELETE usando Delta Lake com Apache Spark.</p>
+<h2 id="o-que-e-delta-lake">O que é Delta Lake?</h2>
+<p>Delta Lake é um framework de armazenamento de código aberto que permite a construção de uma arquitetura lakehouse agnóstica de formato. É uma camada de armazenamento otimizada que proporciona a base para as tabelas em uma instância de data lake.</p>
+<h3 id="principais-caracteristicas">Principais Características</h3>
+<ul>
+<li><strong>Transações ACID</strong>: Protege seus dados com serializabilidade, o nível mais forte de isolamento</li>
+<li><strong>Metadados Escaláveis</strong>: Lida com tabelas de escala petabyte com bilhões de partições e arquivos com facilidade</li>
+<li><strong>Time Travel</strong>: Acessa/reverte para versões anteriores de dados para auditorias, rollbacks ou reprodução</li>
+<li><strong>Código Aberto</strong>: Comunidade dirigida, padrões abertos, protocolo aberto, discussões abertas</li>
+<li><strong>Batch/Streaming Unificado</strong>: Semântica de ingestão exatamente uma vez para backfill e consultas interativas</li>
+<li><strong>Evolução/Aplicação de Esquema</strong>: Previne que dados ruins causem corrupção de dados</li>
+<li><strong>Histórico de Auditoria</strong>: Delta Lake registra todos os detalhes de alterações, fornecendo um histórico completo de auditoria</li>
+<li><strong>Operações DML</strong>: APIs SQL, Scala/Java e Python para mesclar, atualizar e excluir conjuntos de dados</li>
+</ul>
+<h2 id="configuracao-do-ambiente">Configuração do Ambiente</h2>
+<p>Para trabalhar com Delta Lake, você precisa configurar uma sessão Spark com suporte ao Delta Lake:</p>
+<pre class="highlight"><code class="language-python">from pyspark.sql import SparkSession
+
+# Criar a sessão Spark com suporte ao Delta Lake
+spark = SparkSession.builder \
+    .appName("DeltaLakeDemo") \
+    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
+    .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
+    .config("spark.databricks.delta.retentionDurationCheck.enabled", "false") \
+    .config("spark.databricks.delta.schema.autoMerge.enabled", "true") \
+    .getOrCreate()</code></pre>
+<h2 id="operacoes-com-delta-lake">Operações com Delta Lake</h2>
+<h3 id="operacao-insert">Operação INSERT</h3>
+<p>O Delta Lake suporta operações de inserção de dados de forma simples e eficiente. Veja como criar uma tabela Delta e inserir dados:</p>
+<pre class="highlight"><code class="language-python"># Criar uma tabela Delta
+df_vendas.write \
+    .format("delta") \
+    .mode("overwrite") \
+    .partitionBy("estado") \
+    .save("/caminho/para/tabela/delta")
+
+# Inserir novos dados
+df_novos.write \
+    .format("delta") \
+    .mode("append") \
+    .save("/caminho/para/tabela/delta")</code></pre>
+<h3 id="operacao-update">Operação UPDATE</h3>
+<p>O Delta Lake permite atualizações de dados usando SQL ou a API do Delta:</p>
+<pre class="highlight"><code class="language-python"># Usando SQL
+spark.sql("""
+UPDATE delta.`/caminho/para/tabela/delta`
+SET preco = 99.90
+WHERE nome = 'Produto B'
+""")
+
+# Usando a API do Delta
+from delta.tables import DeltaTable
+
+deltaTable = DeltaTable.forPath(spark, "/caminho/para/tabela/delta")
+deltaTable.update(
+    condition="nome = 'Produto E'",
+    set={"nome": "'Produto E Premium'", "preco": "149.90"}
+)</code></pre>
+<h3 id="operacao-delete">Operação DELETE</h3>
+<p>O Delta Lake suporta exclusão de dados de forma eficiente:</p>
+<pre class="highlight"><code class="language-python"># Usando SQL
+spark.sql("""
+DELETE FROM delta.`/caminho/para/tabela/delta`
+WHERE categoria = 'Alimentos' AND preco &lt; 30
+""")
+
+# Usando a API do Delta
+deltaTable = DeltaTable.forPath(spark, "/caminho/para/tabela/delta")
+deltaTable.delete("categoria = 'Alimentos' AND preco &lt; 30")</code></pre>
+<h3 id="operacao-merge">Operação MERGE</h3>
+<p>O MERGE é uma operação poderosa que permite atualizar e inserir dados em uma única operação:</p>
+<pre class="highlight"><code class="language-python"># Registrar o DataFrame de origem como uma view temporária
+df_update.createOrReplaceTempView("source_data_temp")
+
+# Realizar a operação MERGE
+spark.sql("""
+MERGE INTO delta.`/caminho/para/tabela/delta` target
+USING source_data_temp source
+ON target.id = source.id
+WHEN MATCHED THEN UPDATE SET
+  target.nome = source.nome,
+  target.preco = source.preco
+WHEN NOT MATCHED THEN INSERT *
+""")</code></pre>
+<h3 id="time-travel">Time Travel</h3>
+<p>O Delta Lake permite acessar versões anteriores dos dados:</p>
+<pre class="highlight"><code class="language-python"># Obter o histórico da tabela
+history_df = spark.sql("DESCRIBE HISTORY delta.`/caminho/para/tabela/delta`")
+
+# Acessar a versão 0 (inicial) da tabela
+df_versao_0 = spark.read.format("delta").option("versionAsOf", 0).load("/caminho/para/tabela/delta")
+
+# Acessar a tabela em um timestamp específico
+df_timestamp = spark.read.format("delta").option("timestampAsOf", "2023-01-01 00:00:00").load("/caminho/para/tabela/delta")</code></pre>
+<h2 id="vantagens-do-delta-lake">Vantagens do Delta Lake</h2>
+<ol>
+<li><strong>Transações ACID</strong>: Garantem a consistência dos dados mesmo em caso de falhas.</li>
+<li><strong>Time Travel</strong>: Permite acessar versões anteriores dos dados para auditoria ou rollback.</li>
+<li><strong>Operações DML</strong>: Suporte a operações como UPDATE, DELETE e MERGE, que não são nativas em formatos tradicionais de data lake.</li>
+<li><strong>Evolução de Esquema</strong>: Permite alterar o esquema dos dados sem afetar os consumidores.</li>
+<li><strong>Unificação de Batch e Streaming</strong>: Permite processar dados em batch e streaming de forma unificada.</li>
+</ol>
+<h2 id="exemplo-completo">Exemplo Completo</h2>
+<p>Para um exemplo completo de operações com Delta Lake, consulte o notebook <a href="../notebooks/delta_lake_operations.ipynb">delta_lake_operations.ipynb</a> incluído neste projeto.</p>
+<h2 id="referencias">Referências</h2>
+<ul>
+<li><a href="https://delta.io/">Site oficial do Delta Lake</a></li>
+<li><a href="https://docs.delta.io/">Documentação do Delta Lake</a></li>
+<li><a href="https://github.com/delta-io/delta">GitHub do Delta Lake</a></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href=".." class="btn btn-neutral float-left" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../apache-iceberg/" class="btn btn-neutral float-right" title="Apache Iceberg">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../apache-iceberg/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

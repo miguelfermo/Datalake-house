@@ -1,0 +1,17 @@
+site_name: Apache Spark com Delta Lake e Apache Iceberg
+site_description: Documentação do projeto de Apache Spark com Delta Lake e Apache Iceberg
+site_author: Miguel Rossi Fermo
+
+nav:
+  - Home: index.md
+  - Delta Lake: delta-lake.md
+  - Apache Iceberg: apache-iceberg.md
+
+theme: readthedocs
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.tasklist
+  - admonition
