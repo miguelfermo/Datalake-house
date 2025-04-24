@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Miguel Rossi Fermo" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Apache Iceberg - Apache Spark com Delta Lake e Apache Iceberg</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Apache Iceberg";
+        var mkdocs_page_input_path = "apache-iceberg.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Apache Spark com Delta Lake e Apache Iceberg
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../delta-lake/">Delta Lake</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Apache Iceberg</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#o-que-e-apache-iceberg">O que é Apache Iceberg?</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#principais-caracteristicas">Principais Características</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configuracao-do-ambiente">Configuração do Ambiente</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#operacoes-com-apache-iceberg">Operações com Apache Iceberg</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#operacao-insert">Operação INSERT</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#operacao-update">Operação UPDATE</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#operacao-delete">Operação DELETE</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#operacao-merge">Operação MERGE</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#time-travel">Time Travel</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#evolucao-de-esquema">Evolução de Esquema</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#vantagens-do-apache-iceberg">Vantagens do Apache Iceberg</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#exemplo-completo">Exemplo Completo</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#referencias">Referências</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Apache Spark com Delta Lake e Apache Iceberg</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Apache Iceberg</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="apache-iceberg">Apache Iceberg</h1>
+<p>O Apache Iceberg é um formato de tabela de alto desempenho para conjuntos de dados analíticos enormes. Nesta página, demonstramos as operações básicas de INSERT, UPDATE e DELETE usando Apache Iceberg com Apache Spark.</p>
+<h2 id="o-que-e-apache-iceberg">O que é Apache Iceberg?</h2>
+<p>Apache Iceberg é um formato de tabela aberta para conjuntos de dados analíticos, projetado para abordar os desafios da gestão e consulta de grandes conjuntos de dados. Iceberg traz a confiabilidade e simplicidade das tabelas SQL para big data, enquanto torna possível que motores como Spark, Trino, Flink, Presto, Hive e Impala trabalhem com segurança com as mesmas tabelas, ao mesmo tempo.</p>
+<h3 id="principais-caracteristicas">Principais Características</h3>
+<ul>
+<li><strong>Formato de Tabela Aberta</strong>: Iceberg é um formato de tabela aberto que permite que diferentes motores de processamento acessem os mesmos dados.</li>
+<li><strong>Transações ACID</strong>: Garantem a consistência dos dados mesmo em caso de falhas.</li>
+<li><strong>Time Travel</strong>: Permite acessar versões anteriores dos dados para auditoria ou rollback.</li>
+<li><strong>Evolução de Esquema</strong>: Permite alterar o esquema dos dados sem afetar os consumidores.</li>
+<li><strong>Operações SQL Expressivas</strong>: Suporte a operações como UPDATE, DELETE e MERGE, que não são nativas em formatos tradicionais de data lake.</li>
+<li><strong>Particionamento Oculto</strong>: O particionamento é gerenciado pelo Iceberg, não pelo usuário, o que simplifica o uso.</li>
+</ul>
+<h2 id="configuracao-do-ambiente">Configuração do Ambiente</h2>
+<p>Para trabalhar com Apache Iceberg, você precisa configurar uma sessão Spark com suporte ao Iceberg:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+
+<span class="c1"># Criar a sessão Spark com suporte ao Apache Iceberg</span>
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span> \
+    <span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="s2">&quot;IcebergDemo&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.extensions&quot;</span><span class="p">,</span> <span class="s2">&quot;org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.catalog.iceberg&quot;</span><span class="p">,</span> <span class="s2">&quot;org.apache.iceberg.spark.SparkCatalog&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.catalog.iceberg.type&quot;</span><span class="p">,</span> <span class="s2">&quot;hadoop&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.catalog.iceberg.warehouse&quot;</span><span class="p">,</span> <span class="s2">&quot;iceberg-warehouse&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+</code></pre></div>
+<h2 id="operacoes-com-apache-iceberg">Operações com Apache Iceberg</h2>
+<h3 id="operacao-insert">Operação INSERT</h3>
+<p>O Apache Iceberg suporta operações de inserção de dados de forma simples e eficiente. Veja como criar uma tabela Iceberg e inserir dados:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Registrar o DataFrame como uma view temporária</span>
+<span class="n">df_vendas</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;temp_view&quot;</span><span class="p">)</span>
+
+<span class="c1"># Criar uma tabela Iceberg</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS iceberg.default.vendas_iceberg</span>
+<span class="s2">USING iceberg</span>
+<span class="s2">PARTITIONED BY (estado)</span>
+<span class="s2">AS SELECT * FROM temp_view</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1"># Inserir novos dados</span>
+<span class="n">df_novos</span><span class="o">.</span><span class="n">writeTo</span><span class="p">(</span><span class="s2">&quot;iceberg.default.vendas_iceberg&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="operacao-update">Operação UPDATE</h3>
+<p>O Apache Iceberg permite atualizações de dados usando SQL:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Atualizar o preço do Produto B</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">UPDATE iceberg.default.vendas_iceberg</span>
+<span class="s2">SET preco = 99.90</span>
+<span class="s2">WHERE nome = &#39;Produto B&#39;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="c1"># Atualizar o nome e o preço do Produto E</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">UPDATE iceberg.default.vendas_iceberg</span>
+<span class="s2">SET nome = &#39;Produto E Premium&#39;, preco = 149.90</span>
+<span class="s2">WHERE nome = &#39;Produto E&#39;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="operacao-delete">Operação DELETE</h3>
+<p>O Apache Iceberg suporta exclusão de dados de forma eficiente:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Excluir produtos da categoria Alimentos com preço menor que 30</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">DELETE FROM iceberg.default.vendas_iceberg</span>
+<span class="s2">WHERE categoria = &#39;Alimentos&#39; AND preco &lt; 30</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="operacao-merge">Operação MERGE</h3>
+<p>O MERGE é uma operação poderosa que permite atualizar e inserir dados em uma única operação:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Registrar o DataFrame de origem como uma view temporária</span>
+<span class="n">df_update</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;source_data_temp&quot;</span><span class="p">)</span>
+
+<span class="c1"># Realizar a operação MERGE</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">MERGE INTO iceberg.default.vendas_iceberg target</span>
+<span class="s2">USING source_data_temp source</span>
+<span class="s2">ON target.id = source.id</span>
+<span class="s2">WHEN MATCHED THEN UPDATE SET</span>
+<span class="s2">  target.nome = source.nome,</span>
+<span class="s2">  target.preco = source.preco</span>
+<span class="s2">WHEN NOT MATCHED THEN INSERT *</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="time-travel">Time Travel</h3>
+<p>O Apache Iceberg permite acessar versões anteriores dos dados:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Obter os snapshots da tabela</span>
+<span class="n">snapshots_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM iceberg.default.vendas_iceberg.snapshots&quot;</span><span class="p">)</span>
+
+<span class="c1"># Acessar um snapshot específico</span>
+<span class="n">first_snapshot_id</span> <span class="o">=</span> <span class="n">snapshots_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;snapshot_id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">df_snapshot</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;snapshot-id&quot;</span><span class="p">,</span> <span class="n">first_snapshot_id</span><span class="p">)</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s2">&quot;iceberg.default.vendas_iceberg&quot;</span><span class="p">)</span>
+
+<span class="c1"># Acessar a tabela em um timestamp específico</span>
+<span class="n">df_timestamp</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;as-of-timestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;2023-01-01 00:00:00&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s2">&quot;iceberg.default.vendas_iceberg&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="evolucao-de-esquema">Evolução de Esquema</h3>
+<p>O Apache Iceberg suporta evolução de esquema de forma transparente:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Adicionar uma nova coluna à tabela</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;ALTER TABLE iceberg.default.vendas_iceberg ADD COLUMN desconto DOUBLE&quot;</span><span class="p">)</span>
+
+<span class="c1"># Atualizar alguns registros com valores para a nova coluna</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">UPDATE iceberg.default.vendas_iceberg</span>
+<span class="s2">SET desconto = preco * 0.1</span>
+<span class="s2">WHERE categoria = &#39;Eletrônicos&#39;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="vantagens-do-apache-iceberg">Vantagens do Apache Iceberg</h2>
+<ol>
+<li><strong>Formato de Tabela Aberta</strong>: Iceberg é um formato de tabela aberto que permite que diferentes motores de processamento acessem os mesmos dados.</li>
+<li><strong>Transações ACID</strong>: Garantem a consistência dos dados mesmo em caso de falhas.</li>
+<li><strong>Time Travel</strong>: Permite acessar versões anteriores dos dados para auditoria ou rollback.</li>
+<li><strong>Evolução de Esquema</strong>: Permite alterar o esquema dos dados sem afetar os consumidores.</li>
+<li><strong>Operações SQL Expressivas</strong>: Suporte a operações como UPDATE, DELETE e MERGE, que não são nativas em formatos tradicionais de data lake.</li>
+<li><strong>Particionamento Oculto</strong>: O particionamento é gerenciado pelo Iceberg, não pelo usuário, o que simplifica o uso.</li>
+</ol>
+<h2 id="exemplo-completo">Exemplo Completo</h2>
+<p>Para um exemplo completo de operações com Apache Iceberg, consulte o notebook <a href="../notebooks/iceberg_operations.ipynb">iceberg_operations.ipynb</a> incluído neste projeto.</p>
+<h2 id="referencias">Referências</h2>
+<ul>
+<li><a href="https://iceberg.apache.org/">Site oficial do Apache Iceberg</a></li>
+<li><a href="https://iceberg.apache.org/docs/latest/">Documentação do Apache Iceberg</a></li>
+<li><a href="https://github.com/apache/iceberg">GitHub do Apache Iceberg</a></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../delta-lake/" class="btn btn-neutral float-left" title="Delta Lake"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../delta-lake/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

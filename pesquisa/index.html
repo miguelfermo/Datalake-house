@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Miguel Rossi Fermo" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Pesquisa sobre Apache Spark, Delta Lake e Apache Iceberg - Apache Spark com Delta Lake e Apache Iceberg</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Pesquisa sobre Apache Spark, Delta Lake e Apache Iceberg";
+        var mkdocs_page_input_path = "pesquisa.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Apache Spark com Delta Lake e Apache Iceberg
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../delta-lake/">Delta Lake</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../apache-iceberg/">Apache Iceberg</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Apache Spark com Delta Lake e Apache Iceberg</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Pesquisa sobre Apache Spark, Delta Lake e Apache Iceberg</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="pesquisa-sobre-apache-spark-delta-lake-e-apache-iceberg">Pesquisa sobre Apache Spark, Delta Lake e Apache Iceberg</h1>
+<h2 id="apache-spark">Apache Spark</h2>
+<h3 id="definicao-e-caracteristicas">Definição e Características</h3>
+<p>O Apache Spark é um sistema de processamento distribuído de código aberto usado para workloads de big data. O sistema utiliza armazenamento em cache na memória e execução otimizada de consultas para processar dados de qualquer tamanho de forma eficiente.</p>
+<h3 id="historia">História</h3>
+<p>O Apache Spark começou em 2009 como um projeto de pesquisa no AMPLab da UC Berkeley, uma colaboração envolvendo estudantes, pesquisadores e professores, focada em domínios de aplicações com uso intensivo de dados. O primeiro artigo intitulado "Spark: Cluster Computing with Working Sets" foi publicado em junho de 2010, e o Spark era de código aberto sob uma licença BSD. Em junho de 2013, o Spark passou para o status de incubação na Apache Software Foundation (ASF) e se estabeleceu como um projeto de alto nível da Apache em fevereiro de 2014.</p>
+<h3 id="funcionamento">Funcionamento</h3>
+<p>O Hadoop MapReduce é um modelo de programação para processar conjuntos de big data com um algoritmo distribuído paralelo, mas tem limitações devido ao processo sequencial de várias etapas necessário para executar um trabalho. O Spark foi criado para resolver essas limitações, processando na memória, reduzindo o número de etapas em uma tarefa e reutilizando dados em várias operações paralelas.</p>
+<p>Com o Spark, é necessária apenas uma etapa em que os dados são lidos na memória, as operações são executadas e os resultados são gravados de volta, resultando em uma execução muito mais rápida. O Spark também reutiliza dados usando um cache na memória para acelerar consideravelmente os algoritmos de machine learning que chamam repetidamente uma função no mesmo conjunto de dados.</p>
+<p>A reutilização de dados é realizada por meio da criação de DataFrames, uma abstração sobre o Conjunto de dados resiliente distribuído (RDD), que é uma coleção de objetos armazenados em cache na memória e reutilizados em várias operações do Spark. Isso reduz drasticamente a latência, fazendo com que o Spark seja várias vezes mais rápido que o MapReduce, especialmente ao realizar machine learning e análises interativas.</p>
+<h3 id="beneficios">Benefícios</h3>
+<ul>
+<li><strong>Rápido</strong>: Por meio do armazenamento em cache na memória e execução otimizada de consultas, o Spark pode oferecer consultas analíticas rápidas de dados de qualquer tamanho.</li>
+<li><strong>Para desenvolvedores</strong>: O Apache Spark suporta de modo nativo Java, Scala, R e Python, oferecendo várias linguagens para a criação de aplicativos. Essas APIs facilitam as coisas para seus desenvolvedores, pois ocultam a complexidade do processamento distribuído por trás de operadores simples e de alto nível que reduzem drasticamente a quantidade de código necessária.</li>
+<li><strong>Várias workloads</strong>: O Apache Spark vem com a capacidade de executar várias workloads, incluindo consultas interativas, análises em tempo real, machine learning e processamento de gráficos. Uma aplicação pode combinar várias workloads facilmente.</li>
+</ul>
+<h3 id="diferencas-entre-spark-e-hadoop">Diferenças entre Spark e Hadoop</h3>
+<p>Além das diferenças no design do Spark e do Hadoop MapReduce, muitas organizações descobriram que essas estruturas de big data são complementares, usando-as juntas para resolver um desafio comercial mais amplo.</p>
+<p>O Hadoop é uma estrutura de código aberto que tem o Sistema de Arquivos Distribuído do Hadoop (HDFS) como armazenamento, o YARN como gerenciamento de recursos e a programação MapReduce como mecanismo de execução. Em uma implementação típica do Hadoop, diferentes mecanismos de execução também são implantados, como Spark, Tez e Presto.</p>
+<p>O Spark é uma estrutura de código aberto focada em consultas interativas, machine learning e workloads em tempo real. Não tem seu próprio sistema de armazenamento, mas executa análises em outros sistemas de armazenamento, como o HDFS, ou em outras lojas populares, como Amazon Redshift, Amazon S3, Couchbase, Cassandra e outras.</p>
+<h2 id="delta-lake">Delta Lake</h2>
+<h3 id="definicao-e-caracteristicas_1">Definição e Características</h3>
+<p>Delta Lake é um framework de armazenamento de código aberto que permite a construção de uma arquitetura lakehouse agnóstica de formato. É uma camada de armazenamento otimizada que proporciona a base para as tabelas em uma instância de data lake.</p>
+<h3 id="funcionalidades-principais">Funcionalidades Principais</h3>
+<ul>
+<li><strong>Transações ACID</strong>: Protege seus dados com serializabilidade, o nível mais forte de isolamento</li>
+<li><strong>Metadados Escaláveis</strong>: Lida com tabelas de escala petabyte com bilhões de partições e arquivos com facilidade</li>
+<li><strong>Viagem no Tempo (Time Travel)</strong>: Acessa/reverte para versões anteriores de dados para auditorias, rollbacks ou reprodução</li>
+<li><strong>Código Aberto</strong>: Orientado pela comunidade, padrões abertos, protocolo aberto, discussões abertas</li>
+<li><strong>Batch/Streaming Unificado</strong>: Semântica de ingestão exatamente uma vez para backfill e consultas interativas</li>
+<li><strong>Evolução/Aplicação de Esquema</strong>: Previne que dados ruins causem corrupção de dados</li>
+<li><strong>Histórico de Auditoria</strong>: Delta Lake registra todos os detalhes de alterações, fornecendo um histórico completo de auditoria</li>
+<li><strong>Operações DML</strong>: APIs SQL, Scala/Java e Python para mesclar, atualizar e excluir conjuntos de dados</li>
+</ul>
+<h3 id="integracao-com-ecossistemas">Integração com Ecossistemas</h3>
+<p>Delta Lake funciona com motores de computação incluindo Spark, PrestoDB, Flink, Trino, Hive, Snowflake, Google BigQuery, Athena, Redshift, Databricks, Azure Fabric e APIs para Scala, Java, Rust e Python. Com o Delta Universal Format (UniForm), você pode ler tabelas Delta com clientes Iceberg e Hudi.</p>
+<h2 id="apache-iceberg">Apache Iceberg</h2>
+<h3 id="definicao-e-caracteristicas_2">Definição e Características</h3>
+<p>Apache Iceberg é um formato de tabela de alto desempenho para conjuntos de dados analíticos enormes. Iceberg traz a confiabilidade e simplicidade das tabelas SQL para big data, enquanto torna possível que motores como Spark, Trino, Flink, Presto, Hive e Impala trabalhem com segurança com as mesmas tabelas, ao mesmo tempo.</p>
+<h3 id="funcionalidades-principais_1">Funcionalidades Principais</h3>
+<ul>
+<li><strong>SQL Expressivo</strong>: Iceberg suporta comandos SQL flexíveis para mesclar novos dados, atualizar linhas existentes e realizar exclusões direcionadas. Iceberg pode reescrever avidamente arquivos de dados para desempenho de leitura, ou pode usar deltas de exclusão para atualizações mais rápidas.</li>
+<li><strong>Evolução Completa de Esquema</strong>: A evolução de esquema funciona perfeitamente. Adicionar uma coluna não trará de volta dados antigos. Adicionar uma coluna com um valor padrão não reescreve os dados existentes. Os tipos de coluna podem ser promovidos sem reescrever dados.</li>
+<li><strong>Formato de Tabela Aberta</strong>: Iceberg é um formato de tabela aberta para conjuntos de dados analíticos, projetado para abordar os desafios da gestão e consulta de grandes conjuntos de dados.</li>
+</ul>
+<h3 id="beneficios_1">Benefícios</h3>
+<ul>
+<li><strong>Código Aberto</strong>: Apache Iceberg é um projeto de código aberto, o que significa que é gratuito para usar e modificar.</li>
+<li><strong>Alto Desempenho</strong>: Oferece uma forma rápida e eficiente de processar grandes conjuntos de dados em escala.</li>
+<li><strong>Compatibilidade</strong>: Funciona com vários motores de processamento de dados, incluindo Spark, Trino, Flink, Presto, Hive e Impala.</li>
+<li><strong>Confiabilidade</strong>: Traz a confiabilidade e simplicidade das tabelas SQL para big data.</li>
+</ul>
+<h3 id="casos-de-uso">Casos de Uso</h3>
+<p>Apache Iceberg é particularmente útil para:
+- Processamento de grandes conjuntos de dados analíticos
+- Ambientes onde múltiplos motores de processamento precisam acessar os mesmos dados
+- Cenários que exigem evolução de esquema sem interrupção
+- Operações que necessitam de transações ACID em dados de big data</p>
+<p>E se você leu até aqui, parabéns!</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
