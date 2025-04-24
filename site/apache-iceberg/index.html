@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Alexandre Destro Zanoni" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Miguel Rossi Fermo" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
     <title>Apache Iceberg - Apache Spark com Delta Lake e Apache Iceberg</title>
     <link rel="stylesheet" href="../css/theme.css" />
@@ -121,91 +121,98 @@
 </ul>
 <h2 id="configuracao-do-ambiente">Configuração do Ambiente</h2>
 <p>Para trabalhar com Apache Iceberg, você precisa configurar uma sessão Spark com suporte ao Iceberg:</p>
-<pre class="highlight"><code class="language-python">from pyspark.sql import SparkSession
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
 
-# Criar a sessão Spark com suporte ao Apache Iceberg
-spark = SparkSession.builder \
-    .appName("IcebergDemo") \
-    .config("spark.sql.extensions", "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions") \
-    .config("spark.sql.catalog.iceberg", "org.apache.iceberg.spark.SparkCatalog") \
-    .config("spark.sql.catalog.iceberg.type", "hadoop") \
-    .config("spark.sql.catalog.iceberg.warehouse", "iceberg-warehouse") \
-    .getOrCreate()</code></pre>
+<span class="c1"># Criar a sessão Spark com suporte ao Apache Iceberg</span>
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span> \
+    <span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="s2">&quot;IcebergDemo&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.extensions&quot;</span><span class="p">,</span> <span class="s2">&quot;org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.catalog.iceberg&quot;</span><span class="p">,</span> <span class="s2">&quot;org.apache.iceberg.spark.SparkCatalog&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.catalog.iceberg.type&quot;</span><span class="p">,</span> <span class="s2">&quot;hadoop&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.catalog.iceberg.warehouse&quot;</span><span class="p">,</span> <span class="s2">&quot;iceberg-warehouse&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+</code></pre></div>
 <h2 id="operacoes-com-apache-iceberg">Operações com Apache Iceberg</h2>
 <h3 id="operacao-insert">Operação INSERT</h3>
 <p>O Apache Iceberg suporta operações de inserção de dados de forma simples e eficiente. Veja como criar uma tabela Iceberg e inserir dados:</p>
-<pre class="highlight"><code class="language-python"># Registrar o DataFrame como uma view temporária
-df_vendas.createOrReplaceTempView("temp_view")
+<div class="highlight"><pre><span></span><code><span class="c1"># Registrar o DataFrame como uma view temporária</span>
+<span class="n">df_vendas</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;temp_view&quot;</span><span class="p">)</span>
 
-# Criar uma tabela Iceberg
-spark.sql("""
-CREATE TABLE IF NOT EXISTS iceberg.default.vendas_iceberg
-USING iceberg
-PARTITIONED BY (estado)
-AS SELECT * FROM temp_view
-""")
+<span class="c1"># Criar uma tabela Iceberg</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS iceberg.default.vendas_iceberg</span>
+<span class="s2">USING iceberg</span>
+<span class="s2">PARTITIONED BY (estado)</span>
+<span class="s2">AS SELECT * FROM temp_view</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
 
-# Inserir novos dados
-df_novos.writeTo("iceberg.default.vendas_iceberg").append()</code></pre>
+<span class="c1"># Inserir novos dados</span>
+<span class="n">df_novos</span><span class="o">.</span><span class="n">writeTo</span><span class="p">(</span><span class="s2">&quot;iceberg.default.vendas_iceberg&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">()</span>
+</code></pre></div>
 <h3 id="operacao-update">Operação UPDATE</h3>
 <p>O Apache Iceberg permite atualizações de dados usando SQL:</p>
-<pre class="highlight"><code class="language-python"># Atualizar o preço do Produto B
-spark.sql("""
-UPDATE iceberg.default.vendas_iceberg
-SET preco = 99.90
-WHERE nome = 'Produto B'
-""")
+<div class="highlight"><pre><span></span><code><span class="c1"># Atualizar o preço do Produto B</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">UPDATE iceberg.default.vendas_iceberg</span>
+<span class="s2">SET preco = 99.90</span>
+<span class="s2">WHERE nome = &#39;Produto B&#39;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
 
-# Atualizar o nome e o preço do Produto E
-spark.sql("""
-UPDATE iceberg.default.vendas_iceberg
-SET nome = 'Produto E Premium', preco = 149.90
-WHERE nome = 'Produto E'
-""")</code></pre>
+<span class="c1"># Atualizar o nome e o preço do Produto E</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">UPDATE iceberg.default.vendas_iceberg</span>
+<span class="s2">SET nome = &#39;Produto E Premium&#39;, preco = 149.90</span>
+<span class="s2">WHERE nome = &#39;Produto E&#39;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+</code></pre></div>
 <h3 id="operacao-delete">Operação DELETE</h3>
 <p>O Apache Iceberg suporta exclusão de dados de forma eficiente:</p>
-<pre class="highlight"><code class="language-python"># Excluir produtos da categoria Alimentos com preço menor que 30
-spark.sql("""
-DELETE FROM iceberg.default.vendas_iceberg
-WHERE categoria = 'Alimentos' AND preco &lt; 30
-""")</code></pre>
+<div class="highlight"><pre><span></span><code><span class="c1"># Excluir produtos da categoria Alimentos com preço menor que 30</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">DELETE FROM iceberg.default.vendas_iceberg</span>
+<span class="s2">WHERE categoria = &#39;Alimentos&#39; AND preco &lt; 30</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+</code></pre></div>
 <h3 id="operacao-merge">Operação MERGE</h3>
 <p>O MERGE é uma operação poderosa que permite atualizar e inserir dados em uma única operação:</p>
-<pre class="highlight"><code class="language-python"># Registrar o DataFrame de origem como uma view temporária
-df_update.createOrReplaceTempView("source_data_temp")
+<div class="highlight"><pre><span></span><code><span class="c1"># Registrar o DataFrame de origem como uma view temporária</span>
+<span class="n">df_update</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;source_data_temp&quot;</span><span class="p">)</span>
 
-# Realizar a operação MERGE
-spark.sql("""
-MERGE INTO iceberg.default.vendas_iceberg target
-USING source_data_temp source
-ON target.id = source.id
-WHEN MATCHED THEN UPDATE SET
-  target.nome = source.nome,
-  target.preco = source.preco
-WHEN NOT MATCHED THEN INSERT *
-""")</code></pre>
+<span class="c1"># Realizar a operação MERGE</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">MERGE INTO iceberg.default.vendas_iceberg target</span>
+<span class="s2">USING source_data_temp source</span>
+<span class="s2">ON target.id = source.id</span>
+<span class="s2">WHEN MATCHED THEN UPDATE SET</span>
+<span class="s2">  target.nome = source.nome,</span>
+<span class="s2">  target.preco = source.preco</span>
+<span class="s2">WHEN NOT MATCHED THEN INSERT *</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+</code></pre></div>
 <h3 id="time-travel">Time Travel</h3>
 <p>O Apache Iceberg permite acessar versões anteriores dos dados:</p>
-<pre class="highlight"><code class="language-python"># Obter os snapshots da tabela
-snapshots_df = spark.sql("SELECT * FROM iceberg.default.vendas_iceberg.snapshots")
+<div class="highlight"><pre><span></span><code><span class="c1"># Obter os snapshots da tabela</span>
+<span class="n">snapshots_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM iceberg.default.vendas_iceberg.snapshots&quot;</span><span class="p">)</span>
 
-# Acessar um snapshot específico
-first_snapshot_id = snapshots_df.select("snapshot_id").first()[0]
-df_snapshot = spark.read.option("snapshot-id", first_snapshot_id).table("iceberg.default.vendas_iceberg")
+<span class="c1"># Acessar um snapshot específico</span>
+<span class="n">first_snapshot_id</span> <span class="o">=</span> <span class="n">snapshots_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;snapshot_id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">df_snapshot</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;snapshot-id&quot;</span><span class="p">,</span> <span class="n">first_snapshot_id</span><span class="p">)</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s2">&quot;iceberg.default.vendas_iceberg&quot;</span><span class="p">)</span>
 
-# Acessar a tabela em um timestamp específico
-df_timestamp = spark.read.option("as-of-timestamp", "2023-01-01 00:00:00").table("iceberg.default.vendas_iceberg")</code></pre>
+<span class="c1"># Acessar a tabela em um timestamp específico</span>
+<span class="n">df_timestamp</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;as-of-timestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;2023-01-01 00:00:00&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s2">&quot;iceberg.default.vendas_iceberg&quot;</span><span class="p">)</span>
+</code></pre></div>
 <h3 id="evolucao-de-esquema">Evolução de Esquema</h3>
 <p>O Apache Iceberg suporta evolução de esquema de forma transparente:</p>
-<pre class="highlight"><code class="language-python"># Adicionar uma nova coluna à tabela
-spark.sql("ALTER TABLE iceberg.default.vendas_iceberg ADD COLUMN desconto DOUBLE")
+<div class="highlight"><pre><span></span><code><span class="c1"># Adicionar uma nova coluna à tabela</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;ALTER TABLE iceberg.default.vendas_iceberg ADD COLUMN desconto DOUBLE&quot;</span><span class="p">)</span>
 
-# Atualizar alguns registros com valores para a nova coluna
-spark.sql("""
-UPDATE iceberg.default.vendas_iceberg
-SET desconto = preco * 0.1
-WHERE categoria = 'Eletrônicos'
-""")</code></pre>
+<span class="c1"># Atualizar alguns registros com valores para a nova coluna</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">UPDATE iceberg.default.vendas_iceberg</span>
+<span class="s2">SET desconto = preco * 0.1</span>
+<span class="s2">WHERE categoria = &#39;Eletrônicos&#39;</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+</code></pre></div>
 <h2 id="vantagens-do-apache-iceberg">Vantagens do Apache Iceberg</h2>
 <ol>
 <li><strong>Formato de Tabela Aberta</strong>: Iceberg é um formato de tabela aberto que permite que diferentes motores de processamento acessem os mesmos dados.</li>
